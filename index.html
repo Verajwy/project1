@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>贪吃蛇游戏</title>
+	<style type="text/css">
+		#maps{
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+    <button id="start">开始游戏</button>
+    <div>宽度：
+        <input id="map_width" value="800">
+    </div>
+    <div>高度：
+        <input id="map_height" value="500">
+    </div>
+    <script src="js/tools_1.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/food.js"></script>
+    <script src="js/snake.js"></script>
+    <script type="text/javascript">
+        document.getElementById("start").onclick = function () {
+            const _map = document.getElementById("maps");
+            if (_map !== null) {
+                _map.parentElement.removeChild(_map);
+				var highestTimeoutId = setInterval(";");  
+					for (var i = 0 ; i < highestTimeoutId ; i++) {  
+					clearInterval(i);   
+				}  
+            }
+            var width = document.getElementById("map_width").value,
+                height = document.getElementById("map_height").value;
+				if((width/20)%1!==0){
+					width=Number(width)-10;
+				}
+				if((height/20)%1!==0){
+					height=height-10;
+				}
+            const map = new Map({width,height});
+            const food = new Food();
+            food.map = map;
+            food.createDom();
+            const snake = new Snake();
+            snake.map = map;
+            snake.createDom();
+            document.onkeydown = function (e) {
+                const code = e.which;
+                snake.setDirection(code);
+            }
+            var timer = setInterval(function () {
+				
+                let len = snake.bodies.length;
+                let col = map.width / food.width,
+                    row = map.height / food.height;
+                snake.move();
+                snake.eat(food);
+                if (snake.bodies[len - 1].x >= col || snake.bodies[len - 1].y >= row || snake.bodies[
+                        len - 1].x < 0 || snake.bodies[len - 1].y < 0) {
+                    clearInterval(timer);
+                    alert("You have just die!");
+                }
+                for (let i = 0; i < len - 1; i++) {
+                    if (snake.bodies[len - 1].x === snake.bodies[i].x && snake.bodies[len - 1].y ===
+                        snake.bodies[i].y) {
+                        clearInterval(timer);
+                        alert("You have just die!");
+                    }
+                }
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
